@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1790277617861" clover="3.2.0">
+  <project timestamp="1790277617862" name="All files">
+    <metrics statements="44" coveredstatements="44" conditionals="38" coveredconditionals="37" methods="12" coveredmethods="12" elements="94" coveredelements="93" complexity="0" loc="44" ncloc="44" packages="1" files="2" classes="2"/>
+    <file name="UserForm.vue" path="/Users/heloisabiagi/Documents/playground/claude-vue-sql-test-list/client/src/components/UserForm.vue">
+      <metrics statements="19" coveredstatements="19" conditionals="30" coveredconditionals="29" methods="6" coveredmethods="6"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="148" count="1" type="stmt"/>
+      <line num="151" count="1" type="stmt"/>
+      <line num="152" count="1" type="stmt"/>
+      <line num="153" count="1" type="stmt"/>
+      <line num="157" count="1" type="stmt"/>
+      <line num="161" count="1" type="stmt"/>
+      <line num="162" count="1" type="stmt"/>
+      <line num="166" count="1" type="stmt"/>
+      <line num="170" count="1" type="stmt"/>
+      <line num="173" count="1" type="stmt"/>
+      <line num="175" count="54" type="stmt"/>
+      <line num="180" count="3" type="stmt"/>
+      <line num="187" count="3" type="stmt"/>
+      <line num="194" count="2" type="stmt"/>
+      <line num="197" count="162" type="stmt"/>
+      <line num="209" count="1" type="stmt"/>
+      <line num="212" count="1" type="stmt"/>
+    </file>
+    <file name="UserTable.vue" path="/Users/heloisabiagi/Documents/playground/claude-vue-sql-test-list/client/src/components/UserTable.vue">
+      <metrics statements="25" coveredstatements="25" conditionals="8" coveredconditionals="8" methods="6" coveredmethods="6"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="28" count="18" type="stmt"/>
+      <line num="31" count="31" type="stmt"/>
+      <line num="32" count="31" type="cond" truecount="2" falsecount="0"/>
+      <line num="38" count="18" type="stmt"/>
+      <line num="41" count="18" type="stmt"/>
+      <line num="45" count="18" type="stmt"/>
+      <line num="50" count="1" type="stmt"/>
+      <line num="53" count="1" type="stmt"/>
+      <line num="54" count="1" type="stmt"/>
+      <line num="55" count="1" type="stmt"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="61" count="1" type="stmt"/>
+      <line num="62" count="1" type="stmt"/>
+      <line num="65" count="1" type="stmt"/>
+      <line num="68" count="1" type="stmt"/>
+      <line num="69" count="1" type="stmt"/>
+      <line num="70" count="1" type="stmt"/>
+      <line num="75" count="18" type="stmt"/>
+      <line num="82" count="31" type="stmt"/>
+      <line num="93" count="1" type="stmt"/>
+      <line num="99" count="1" type="stmt"/>
+      <line num="103" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

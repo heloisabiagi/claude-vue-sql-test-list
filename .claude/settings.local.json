@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(curl -s http://localhost:3000/api/users?limit=2)",
+      "Bash(curl -s http://localhost:3000/api/users?search=ada)",
+      "Bash(curl -s -i -X POST http://localhost:3000/api/users -H 'Content-Type: application/json' -d '{\"name\":\"  Margaret Hamilton \",\"email\":\"MARGARET@Example.com\",\"role\":\"admin\"}')",
+      "Bash(curl -s -X PATCH http://localhost:3000/api/users/6 -H 'Content-Type: application/json' -d '{\"role\":\"viewer\"}')",
+      "Bash(curl -s -o /dev/null -w '%{http_code}\\\\n' -X PATCH http://localhost:3000/api/users/6 -H 'Content-Type: application/json' -d '{\"email\":\"margaret@example.com\"}')",
+      "Bash(curl -s -X PATCH http://localhost:3000/api/users/6 -H 'Content-Type: application/json' -d '{\"email\":\"ada@example.com\"}')",
+      "Bash(curl -s -X PUT http://localhost:3000/api/users/6 -H 'Content-Type: application/json' -d '{\"name\":\"Margaret H\",\"email\":\"mh@example.com\",\"role\":\"member\"}')",
+      "Bash(curl -s -X POST http://localhost:3000/api/users -H 'Content-Type: application/json' -d '{\"name\":\"\",\"email\":\"not-an-email\",\"role\":\"wizard\"}')",
+      "Bash(npx vite *)",
+      "Bash(npx jest *)",
+      "Bash(cp src/components/UserForm.vue /tmp/UserForm.bak)",
+      "Bash(cp src/components/UserTable.vue /tmp/UserTable.bak)",
+      "Bash(perl -0pi -e 's/if \\\\\\(!isEdit\\\\.value\\\\\\) \\\\{/if \\(false\\) {/' src/components/UserForm.vue)",
+      "Bash(perl -0pi -e 's/if \\\\\\(err\\\\?\\\\.details && Object\\\\.keys\\\\\\(err\\\\.details\\\\\\)\\\\.length\\\\\\)/if \\(false\\)/' src/components/UserForm.vue)",
+      "Bash(perl -0pi -e 's/v-if=\"!users\\\\.length && !loading\"/v-if=\"!users.length\"/' src/components/UserTable.vue)",
+      "Bash(cp /tmp/UserForm.bak src/components/UserForm.vue)",
+      "Bash(cp /tmp/UserTable.bak src/components/UserTable.vue)"
+    ],
+    "additionalDirectories": [
+      "/private/tmp"
+    ]
+  }
+}
