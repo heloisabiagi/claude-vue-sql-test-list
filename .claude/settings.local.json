@@ -22,7 +22,12 @@
       "Bash(cp /tmp/UserForm.bak src/components/UserForm.vue)",
       "Bash(cp /tmp/UserTable.bak src/components/UserTable.vue)",
       "Bash(curl -s \"http://localhost:3000/api/users\")",
-      "Bash(python3 -m json.tool)"
+      "Bash(python3 -m json.tool)",
+      "Bash(python3 -c ' *)",
+      "Bash(npm ci *)",
+      "Bash(grep -viE \"install-scripts|^$\")",
+      "Bash(node -e ' *)",
+      "Bash(npm test *)"
     ],
     "additionalDirectories": [
       "/private/tmp"

@@ -1,0 +1,47 @@
+name: Tests
+
+on:
+  pull_request:
+  # Also run on master so the default branch always has a known-good result
+  # for PRs to be compared against.
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+# A new push to the same PR cancels the run still in flight for the old commit.
+concurrency:
+  group: tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  jest:
+    name: Jest (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # The project's engines floor is 22.5 (node:sqlite); 24 is current LTS.
+        node: ['22.x', '24.x']
+
+    defaults:
+      run:
+        working-directory: client
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        # --ci fails on missing snapshots instead of writing them silently.
+        run: npm test -- --ci

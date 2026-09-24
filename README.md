@@ -40,6 +40,9 @@ npm --prefix client test              # or from the project root
 npm --prefix client run test:coverage
 ```
 
+CI runs the same suite on every pull request
+([.github/workflows/test.yml](.github/workflows/test.yml)), on Node 22 and 24.
+
 The suite runs against jsdom and needs no server. Vue SFCs go through
 `@vue/vue3-jest` and plain JS through `babel-jest`; because `client/` is an ESM
 package, both configs are `.cjs` ([jest.config.cjs](client/jest.config.cjs),
