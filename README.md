@@ -123,8 +123,12 @@ server/
     db/index.js          connection, pragmas, schema migration
     db/users.js          all SQL for the users table
     db/seed.js           sample data
-    routes/users.js      REST endpoints
-    middleware/          validation and error handling
+    routes/users.js      route table: path + method -> controller
+    controllers/users/   one module per endpoint
+      list.js get.js create.js update.js replace.js remove.js
+      shared.js          404 and duplicate-email guards
+      index.js           barrel the router imports
+    middleware/          validation, error handling, async wrapper
 client/
   src/
     api.js               fetch wrapper

@@ -20,7 +20,9 @@
       "Bash(perl -0pi -e 's/if \\\\\\(err\\\\?\\\\.details && Object\\\\.keys\\\\\\(err\\\\.details\\\\\\)\\\\.length\\\\\\)/if \\(false\\)/' src/components/UserForm.vue)",
       "Bash(perl -0pi -e 's/v-if=\"!users\\\\.length && !loading\"/v-if=\"!users.length\"/' src/components/UserTable.vue)",
       "Bash(cp /tmp/UserForm.bak src/components/UserForm.vue)",
-      "Bash(cp /tmp/UserTable.bak src/components/UserTable.vue)"
+      "Bash(cp /tmp/UserTable.bak src/components/UserTable.vue)",
+      "Bash(curl -s \"http://localhost:3000/api/users\")",
+      "Bash(python3 -m json.tool)"
     ],
     "additionalDirectories": [
       "/private/tmp"
