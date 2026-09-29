@@ -1,4 +1,5 @@
-// ISO 3166-1 alpha-2 codes. Keep in sync with client/src/countries.js.
+// ISO 3166-1 alpha-2 codes: the single list the API validates against and the
+// form offers. Names are not stored here; the client derives them per locale.
 export const COUNTRY_CODES = [
   'AD', 'AE', 'AF', 'AG', 'AI', 'AL', 'AM', 'AO', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AW', 'AX', 'AZ',
   'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BL', 'BM', 'BN', 'BO', 'BQ', 'BR', 'BS',

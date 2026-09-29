@@ -1,5 +1,5 @@
 import { ApiError } from './errors.js';
-import { COUNTRY_CODES } from '../countries.js';
+import { COUNTRY_CODES } from '../../../shared/countries.js';
 
 export const ROLES = ['admin', 'member', 'viewer'];
 

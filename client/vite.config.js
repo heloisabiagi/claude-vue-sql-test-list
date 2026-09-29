@@ -11,6 +11,7 @@ const proxy = {
 
 export default defineConfig({
   plugins: [vue()],
-  server: { port: 5173, proxy },
+  // The country list lives in ../shared so the API and the form use the same codes.
+  server: { port: 5173, proxy, fs: { allow: ['.', '../shared'] } },
   preview: { port: 4173, proxy },
 });
