@@ -3,7 +3,7 @@ import { handle } from '../../middleware/asyncHandler.js';
 import { validateUpdate, parseId } from '../../middleware/validate.js';
 import { loadUserOr404, assertEmailAvailable } from './shared.js';
 
-/** PATCH /api/users/:id — partial update of name, email and/or role. */
+/** PATCH /api/users/:id — partial update of name, email, role and/or country. */
 export const update = handle((req, res) => {
   const id = parseId(req.params.id);
   loadUserOr404(id);

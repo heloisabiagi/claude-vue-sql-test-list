@@ -1,6 +1,6 @@
 import { db } from './index.js';
 
-const COLUMNS = 'id, name, email, role, created_at AS createdAt, updated_at AS updatedAt';
+const COLUMNS = 'id, name, email, role, country, created_at AS createdAt, updated_at AS updatedAt';
 
 /**
  * Lists users with optional case-insensitive search over name and email.
@@ -35,10 +35,10 @@ export function findByEmail(email) {
     .get(email);
 }
 
-export function createUser({ name, email, role }) {
+export function createUser({ name, email, role, country }) {
   const { lastInsertRowid } = db
-    .prepare('INSERT INTO users (name, email, role) VALUES (?, ?, ?)')
-    .run(name, email, role);
+    .prepare('INSERT INTO users (name, email, role, country) VALUES (?, ?, ?, ?)')
+    .run(name, email, role, country);
 
   return getUser(lastInsertRowid);
 }
@@ -51,7 +51,7 @@ export function updateUser(id, fields) {
   const assignments = [];
   const values = [];
 
-  for (const key of ['name', 'email', 'role']) {
+  for (const key of ['name', 'email', 'role', 'country']) {
     if (fields[key] !== undefined) {
       assignments.push(`${key} = ?`);
       values.push(fields[key]);

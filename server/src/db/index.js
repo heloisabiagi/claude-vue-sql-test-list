@@ -25,6 +25,7 @@ export function migrate() {
       name       TEXT    NOT NULL,
       email      TEXT    NOT NULL,
       role       TEXT    NOT NULL DEFAULT 'member',
+      country    TEXT,
       created_at TEXT    NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT    NOT NULL DEFAULT (datetime('now'))
     );
@@ -33,6 +34,13 @@ export function migrate() {
     CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique
       ON users (lower(email));
   `);
+
+  // Databases created before country existed need the column added. It stays
+  // nullable because those older rows have no country; the API requires it.
+  const columns = db.prepare('PRAGMA table_info(users)').all();
+  if (!columns.some((c) => c.name === 'country')) {
+    db.exec('ALTER TABLE users ADD COLUMN country TEXT');
+  }
 }
 
 export { DB_PATH };

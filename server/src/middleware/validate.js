@@ -1,4 +1,5 @@
 import { ApiError } from './errors.js';
+import { COUNTRY_CODES } from '../../../shared/countries.js';
 
 export const ROLES = ['admin', 'member', 'viewer'];
 
@@ -27,21 +28,40 @@ function checkRole(value, errors) {
   }
 }
 
+function checkCountry(value, errors) {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    errors.country = 'Country is required';
+  } else if (!COUNTRY_CODES.includes(value.trim().toUpperCase())) {
+    errors.country = 'Country must be a valid ISO 3166 country code';
+  }
+}
+
+/** Accepts " br " as BR; leaves non-strings alone for the checks to reject. */
+function normalizeCountry(value) {
+  return typeof value === 'string' ? value.trim().toUpperCase() : value;
+}
+
 /** Validates a full user payload for POST, returning normalized values. */
 export function validateCreate(body = {}) {
   const errors = {};
-  const { name, email } = body;
+  const { name, email, country } = body;
   const role = body.role ?? 'member';
 
   checkName(name, errors);
   checkEmail(email, errors);
   checkRole(role, errors);
+  checkCountry(country, errors);
 
   if (Object.keys(errors).length > 0) {
     throw ApiError.badRequest('Validation failed', errors);
   }
 
-  return { name: name.trim(), email: email.trim().toLowerCase(), role };
+  return {
+    name: name.trim(),
+    email: email.trim().toLowerCase(),
+    role,
+    country: normalizeCountry(country),
+  };
 }
 
 /** Validates a partial payload for PATCH; only supplied fields are checked. */
@@ -62,12 +82,16 @@ export function validateUpdate(body = {}) {
     checkRole(body.role, errors);
     patch.role = body.role;
   }
+  if (body.country !== undefined) {
+    checkCountry(body.country, errors);
+    patch.country = normalizeCountry(body.country);
+  }
 
   if (Object.keys(errors).length > 0) {
     throw ApiError.badRequest('Validation failed', errors);
   }
   if (Object.keys(patch).length === 0) {
-    throw ApiError.badRequest('Provide at least one of: name, email, role');
+    throw ApiError.badRequest('Provide at least one of: name, email, role, country');
   }
 
   return patch;
