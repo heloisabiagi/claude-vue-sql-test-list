@@ -1,6 +1,6 @@
 # Creating a User listing AI app with different agents
 
-This project is part of my experimentation with AI Agents (Copilot, Claude etc) creating a simple RESTful Users list with Vue.js, Unit tests and some pre-commit hooks. It demonstrates a minimal Express REST API with a Vue frontend that stores users in a local SQLite database. In this specific repository, I'll be using mostly Claude (Opus 5), and I have the Claude Pro plan.
+This project is part of my experimentation with AI Agents (Copilot, Claude etc) creating a simple RESTful Users list with Vue.js, Unit tests and some pre-commit hooks. It demonstrates a minimal Express REST API with a Vue frontend that stores users in a local SQLite database. In this specific repository, I'll be using mostly Claude (Opus 5), and I have the Claude Pro plan. You can see my experiment with Copilot [in this repo](https://github.com/heloisabiagi/copilot-vue-sql-test-list).
 
 This project is loosely based on this [YouTube video tutorial](https://www.youtube.com/watch?v=wlpBCazAY9Q&t=377s), but I'm adding my personal preferences.
 
@@ -22,7 +22,7 @@ This project is loosely based on this [YouTube video tutorial](https://www.youtu
 2. lack of tests for the new Countries API. I'll add them later.
 3. duplicate source of countries, as expected. This one was fixed with the creation of a shared helper.
 
-Good start with Greptile and happy with my initial setup. Let's see how Copilot/Code Rabbit handle the same functionality.
+Good start with Greptile and happy with my initial setup. Let's see how Copilot/Code Rabbit will handle the same functionality.
 
 
 ---------------------------------------------------------
