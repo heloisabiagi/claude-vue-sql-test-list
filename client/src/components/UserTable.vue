@@ -1,4 +1,6 @@
 <script setup>
+import { countryName } from '../countries.js';
+
 defineProps({
   users: { type: Array, required: true },
   loading: { type: Boolean, default: false },
@@ -23,6 +25,7 @@ function formatDate(value) {
           <th>Name</th>
           <th>Email</th>
           <th>Role</th>
+          <th>Country</th>
           <th>Added</th>
           <th aria-label="Actions"></th>
         </tr>
@@ -32,6 +35,7 @@ function formatDate(value) {
           <td class="name">{{ user.name }}</td>
           <td class="email">{{ user.email }}</td>
           <td><span class="pill" :data-role="user.role">{{ user.role }}</span></td>
+          <td class="country">{{ countryName(user.country) || '—' }}</td>
           <td class="muted">{{ formatDate(user.createdAt) }}</td>
           <td class="row-actions">
             <button type="button" @click="$emit('edit', user)">Edit</button>
@@ -67,6 +71,7 @@ tbody tr:last-child td { border-bottom: none; }
 .name { font-weight: 550; white-space: nowrap; }
 .email { color: var(--muted); }
 .muted { color: var(--muted); white-space: nowrap; }
+.country { white-space: nowrap; }
 
 .pill {
   display: inline-block;

@@ -7,6 +7,7 @@ const USERS = [
     name: 'Ada Lovelace',
     email: 'ada@example.com',
     role: 'admin',
+    country: 'GB',
     createdAt: '2026-09-24 19:02:20',
     updatedAt: '2026-09-24 19:02:20',
   },
@@ -15,6 +16,7 @@ const USERS = [
     name: 'Alan Turing',
     email: 'alan@example.com',
     role: 'member',
+    country: null,
     createdAt: '2026-01-05 08:30:00',
     updatedAt: '2026-01-05 08:30:00',
   },
@@ -33,7 +35,7 @@ describe('UserTable', () => {
 
     it('renders the column headers', () => {
       const headers = build().findAll('th').map((th) => th.text());
-      expect(headers).toEqual(['Name', 'Email', 'Role', 'Added', '']);
+      expect(headers).toEqual(['Name', 'Email', 'Role', 'Country', 'Added', '']);
     });
 
     it('shows each user name, email and role', () => {
@@ -51,6 +53,18 @@ describe('UserTable', () => {
       expect(pills[1].attributes('data-role')).toBe('member');
     });
 
+    it('shows the country by name rather than by code', () => {
+      const [first] = rows(build());
+
+      expect(first.find('.country').text()).toBe('United Kingdom');
+    });
+
+    it('shows a dash for users saved without a country', () => {
+      const [, second] = rows(build());
+
+      expect(second.find('.country').text()).toBe('—');
+    });
+
     it('gives every row an edit and a delete button', () => {
       const [first] = rows(build());
       const buttons = first.findAll('.row-actions button');
@@ -61,7 +75,7 @@ describe('UserTable', () => {
 
   describe('date formatting', () => {
     it('renders the stored timestamp as a readable date', () => {
-      const added = cells(rows(build())[0])[3];
+      const added = cells(rows(build())[0])[4];
 
       expect(added).not.toBe('2026-09-24 19:02:20');
       expect(added).toContain('2026');
@@ -71,7 +85,7 @@ describe('UserTable', () => {
     it('falls back to the raw value when the date cannot be parsed', () => {
       const wrapper = build({ users: [{ ...USERS[0], createdAt: 'not a date' }] });
 
-      expect(cells(rows(wrapper)[0])[3]).toBe('not a date');
+      expect(cells(rows(wrapper)[0])[4]).toBe('not a date');
     });
   });
 

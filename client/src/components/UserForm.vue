@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive, watch, computed } from 'vue';
+import { COUNTRIES } from '../countries.js';
 
 const props = defineProps({
   editing: { type: Object, default: null },
@@ -10,7 +11,7 @@ const emit = defineEmits(['cancel']);
 
 const ROLES = ['admin', 'member', 'viewer'];
 
-const form = reactive({ name: '', email: '', role: 'member' });
+const form = reactive({ name: '', email: '', role: 'member', country: '' });
 const fieldErrors = ref({});
 const formError = ref('');
 const saving = ref(false);
@@ -24,6 +25,7 @@ watch(
     form.name = user?.name ?? '';
     form.email = user?.email ?? '';
     form.role = user?.role ?? 'member';
+    form.country = user?.country ?? '';
     fieldErrors.value = {};
     formError.value = '';
   },
@@ -40,6 +42,7 @@ async function onSubmit() {
       form.name = '';
       form.email = '';
       form.role = 'member';
+      form.country = '';
     }
   } catch (err) {
     if (err?.details && Object.keys(err.details).length) fieldErrors.value = err.details;
@@ -72,6 +75,15 @@ async function onSubmit() {
         <option v-for="role in ROLES" :key="role" :value="role">{{ role }}</option>
       </select>
       <small v-if="fieldErrors.role" class="err">{{ fieldErrors.role }}</small>
+    </label>
+
+    <label>
+      <span>Country</span>
+      <select v-model="form.country">
+        <option value="" disabled>Select a country</option>
+        <option v-for="c in COUNTRIES" :key="c.code" :value="c.code">{{ c.name }}</option>
+      </select>
+      <small v-if="fieldErrors.country" class="err">{{ fieldErrors.country }}</small>
     </label>
 
     <p v-if="formError" class="banner">{{ formError }}</p>

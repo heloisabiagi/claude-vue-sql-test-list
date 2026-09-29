@@ -6,6 +6,7 @@ const ADA = {
   name: 'Ada Lovelace',
   email: 'ada@example.com',
   role: 'admin',
+  country: 'GB',
   createdAt: '2026-09-24 19:02:20',
   updatedAt: '2026-09-24 19:02:20',
 };
@@ -19,14 +20,16 @@ function build({ editing = null, onSave = jest.fn().mockResolvedValue({}) } = {}
 const fields = (wrapper) => ({
   name: wrapper.findAll('input')[0],
   email: wrapper.findAll('input')[1],
-  role: wrapper.find('select'),
+  role: wrapper.findAll('select')[0],
+  country: wrapper.findAll('select')[1],
 });
 
-async function fillIn(wrapper, { name, email, role }) {
+async function fillIn(wrapper, { name, email, role, country }) {
   const f = fields(wrapper);
   if (name !== undefined) await f.name.setValue(name);
   if (email !== undefined) await f.email.setValue(email);
   if (role !== undefined) await f.role.setValue(role);
+  if (country !== undefined) await f.country.setValue(country);
 }
 
 describe('UserForm', () => {
@@ -46,16 +49,37 @@ describe('UserForm', () => {
       expect(f.name.element.value).toBe('');
       expect(f.email.element.value).toBe('');
       expect(f.role.element.value).toBe('member');
+      expect(f.country.element.value).toBe('');
     });
 
     it('offers exactly the three supported roles', () => {
       const { wrapper } = build();
 
-      expect(wrapper.findAll('option').map((o) => o.element.value)).toEqual([
+      expect(fields(wrapper).role.findAll('option').map((o) => o.element.value)).toEqual([
         'admin',
         'member',
         'viewer',
       ]);
+    });
+
+    it('asks for a country with a placeholder that cannot be picked', () => {
+      const { wrapper } = build();
+      const placeholder = fields(wrapper).country.find('option');
+
+      expect(placeholder.text()).toBe('Select a country');
+      expect(placeholder.element.value).toBe('');
+      expect(placeholder.element.disabled).toBe(true);
+    });
+
+    it('lists countries by name, alphabetically, saving their ISO code', () => {
+      const { wrapper } = build();
+      const options = fields(wrapper).country.findAll('option:not([disabled])');
+      const names = options.map((o) => o.text());
+
+      expect(options).toHaveLength(249);
+      expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+      const brazil = options.find((o) => o.text() === 'Brazil');
+      expect(brazil.element.value).toBe('BR');
     });
 
     it('passes the entered values to onSave', async () => {
@@ -64,6 +88,7 @@ describe('UserForm', () => {
         name: 'Grace Hopper',
         email: 'grace@example.com',
         role: 'viewer',
+        country: 'US',
       });
 
       await wrapper.find('form').trigger('submit');
@@ -73,12 +98,18 @@ describe('UserForm', () => {
         name: 'Grace Hopper',
         email: 'grace@example.com',
         role: 'viewer',
+        country: 'US',
       });
     });
 
     it('clears the form after a successful save', async () => {
       const { wrapper } = build();
-      await fillIn(wrapper, { name: 'Grace', email: 'grace@example.com', role: 'admin' });
+      await fillIn(wrapper, {
+        name: 'Grace',
+        email: 'grace@example.com',
+        role: 'admin',
+        country: 'US',
+      });
 
       await wrapper.find('form').trigger('submit');
       await flushPromises();
@@ -87,6 +118,7 @@ describe('UserForm', () => {
       expect(f.name.element.value).toBe('');
       expect(f.email.element.value).toBe('');
       expect(f.role.element.value).toBe('member');
+      expect(f.country.element.value).toBe('');
     });
 
     it('keeps the entered values when the save fails', async () => {
@@ -117,6 +149,7 @@ describe('UserForm', () => {
       expect(f.name.element.value).toBe('Ada Lovelace');
       expect(f.email.element.value).toBe('ada@example.com');
       expect(f.role.element.value).toBe('admin');
+      expect(f.country.element.value).toBe('GB');
     });
 
     it('emits cancel when the cancel button is clicked', async () => {
@@ -140,13 +173,27 @@ describe('UserForm', () => {
       const { wrapper } = build({ editing: ADA });
 
       await wrapper.setProps({
-        editing: { ...ADA, id: 2, name: 'Alan Turing', email: 'alan@example.com', role: 'member' },
+        editing: {
+          ...ADA,
+          id: 2,
+          name: 'Alan Turing',
+          email: 'alan@example.com',
+          role: 'member',
+          country: 'US',
+        },
       });
 
       const f = fields(wrapper);
       expect(f.name.element.value).toBe('Alan Turing');
       expect(f.email.element.value).toBe('alan@example.com');
       expect(f.role.element.value).toBe('member');
+      expect(f.country.element.value).toBe('US');
+    });
+
+    it('leaves the country unselected for users saved without one', () => {
+      const { wrapper } = build({ editing: { ...ADA, country: null } });
+
+      expect(fields(wrapper).country.element.value).toBe('');
     });
 
     it('resets to a blank form when editing is cleared', async () => {
@@ -162,7 +209,11 @@ describe('UserForm', () => {
   describe('error handling', () => {
     it('shows per-field messages from a validation failure', async () => {
       const err = Object.assign(new Error('Validation failed'), {
-        details: { name: 'Name is required', email: 'Email must be a valid address' },
+        details: {
+          name: 'Name is required',
+          email: 'Email must be a valid address',
+          country: 'Country is required',
+        },
       });
       const { wrapper } = build({ onSave: jest.fn().mockRejectedValue(err) });
 
@@ -172,6 +223,7 @@ describe('UserForm', () => {
       const messages = wrapper.findAll('small.err').map((n) => n.text());
       expect(messages).toContain('Name is required');
       expect(messages).toContain('Email must be a valid address');
+      expect(messages).toContain('Country is required');
       expect(wrapper.find('p.banner').exists()).toBe(false);
     });
 
