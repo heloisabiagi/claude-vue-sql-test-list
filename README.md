@@ -15,7 +15,7 @@ This project is loosely based on this [YouTube video tutorial](https://www.youtu
 
 ### Log 2: Adding a new 'Country' fields, testing Greptile for Code Reviews
 
-- I've decided to add a new field, Country, and make it mandatory. Claude create the backend and frontend functionality, but did not add the field to the User table yet, as the users wouldn't have an assigned country, which was a smart move.
+- I've decided to add a new field, Country, and make it mandatory. Claude create the backend and frontend functionality.
 - Claude created two different list of country codes to be used in the server and the client. This could generate inconsistencies, but I want to check if Greptile will catch it.
 - Pushed the changes and created a PR. Greptile caught 3 issues, but flagged them as nitpicks:
 1. If the method `Intl.DisplayNames` is not supported by the browser, it could prevent the component mounting and there are no fallbacks. As I'm building this app to run with modern browsers in mind, I'm ignoring it.
