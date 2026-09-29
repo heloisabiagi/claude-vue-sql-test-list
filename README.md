@@ -13,6 +13,17 @@ This project is loosely based on this [YouTube video tutorial](https://www.youtu
 - Adding Unit tests to the components went also smooth. I've explicitly asked Claude to use JEST, although it suggested me to use Vitest. It has added 36 (!) test cases (as opposed to the 4 added by Copilot).
 - Claude's capability of generating a great amount of code with little instruction can easily become a double-edged sword. If you don't explicitly add constraints, I can see its tendency to overdo things. So far, I've only been doing vibe coding, so not truly concerned about it, but in real production environments, it would truly benefit from Spec Driven Development.
 
+### Log 2: Adding a new 'Country' fields, testing Greptile for Code Reviews
+
+- I've decided to add a new field, Country, and make it mandatory. Claude create the backend and frontend functionality, but did not add the field to the User table yet, as the users wouldn't have an assigned country, which was a smart move.
+- Claude created two different list of country codes to be used in the server and the client. This could generate inconsistencies, but I want to check if Greptile will catch it.
+- Pushed the changes and created a PR. Greptile caught 3 issues, but flagged them as nitpicks:
+1. If the method `Intl.DisplayNames` is not supported by the browser, it could prevent the component mounting and there are no fallbacks. As I'm building this app to run with modern browsers in mind, I'm ignoring it.
+2. lack of tests for the new Countries API. I'll add them later.
+3. duplicate source of countries, as expected. This one was fixed with the creation of a shared helper.
+
+Good start with Greptile and happy with my initial setup. Let's see how Copilot/Code Rabbit handle the same functionality.
+
 
 ---------------------------------------------------------
 
