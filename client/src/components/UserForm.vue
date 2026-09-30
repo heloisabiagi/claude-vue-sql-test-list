@@ -54,7 +54,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <form class="card form" @submit.prevent="onSubmit">
+  <form class="form" @submit.prevent="onSubmit">
     <h2>{{ isEdit ? 'Edit user' : 'Add a user' }}</h2>
 
     <label>
@@ -92,7 +92,7 @@ async function onSubmit() {
       <button type="submit" class="primary" :disabled="saving">
         {{ saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add user' }}
       </button>
-      <button v-if="isEdit" type="button" @click="emit('cancel')">Cancel</button>
+      <button type="button" @click="emit('cancel')">Cancel</button>
     </div>
   </form>
 </template>

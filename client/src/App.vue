@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useUsers } from './composables/useUsers.js';
 import UserForm from './components/UserForm.vue';
 import UserTable from './components/UserTable.vue';
+import BaseModal from './components/BaseModal.vue';
 
 const {
   users, total, search, loading, error,
@@ -11,6 +12,7 @@ const {
 } = useUsers();
 
 const editing = ref(null);
+const formOpen = ref(false);
 const notice = ref('');
 
 onMounted(load);
@@ -20,23 +22,40 @@ function flash(message) {
   setTimeout(() => (notice.value = ''), 3000);
 }
 
-// Passed to the form; rejections flow back so it can show field-level errors.
+// Counts modal openings. A save can outlive its modal (closed with Cancel or
+// Esc while pending, then another one opened); comparing counts lets it tell.
+let formSession = 0;
+
+function openForm(user = null) {
+  formSession += 1;
+  editing.value = user;
+  formOpen.value = true;
+}
+
+function closeForm() {
+  formOpen.value = false;
+  editing.value = null;
+}
+
+// Passed to the form; rejections flow back so it can show field-level errors
+// and the modal stays open until the save succeeds.
 async function save(payload) {
+  const session = formSession;
   if (editing.value) {
     await update(editing.value.id, payload);
     flash('User updated');
-    editing.value = null;
   } else {
     await create(payload);
     flash('User added');
   }
+  // Only close the modal this save came from, never one opened since.
+  if (session === formSession) closeForm();
 }
 
 async function onDelete(user) {
   if (!confirm(`Delete ${user.name}? This cannot be undone.`)) return;
   try {
     await remove(user.id);
-    if (editing.value?.id === user.id) editing.value = null;
     flash('User deleted');
   } catch (err) {
     flash(err.message);
@@ -56,41 +75,38 @@ async function onDelete(user) {
 
     <p v-if="notice" class="toast">{{ notice }}</p>
 
-    <div class="layout">
-      <UserForm
-        :editing="editing"
-        :on-save="save"
-        @cancel="editing = null"
+    <section class="card list">
+      <div class="toolbar">
+        <input
+          v-model="search"
+          type="search"
+          class="search"
+          placeholder="Search name or email…"
+          aria-label="Search users"
+        />
+        <button type="button" class="primary add" @click="openForm()">Add user</button>
+      </div>
+
+      <p v-if="error" class="banner">{{ error }}</p>
+
+      <UserTable
+        :users="users"
+        :loading="loading"
+        :editing-id="editing?.id ?? null"
+        @edit="openForm"
+        @delete="onDelete"
       />
 
-      <section class="card list">
-        <div class="toolbar">
-          <input
-            v-model="search"
-            type="search"
-            class="search"
-            placeholder="Search name or email…"
-            aria-label="Search users"
-          />
-        </div>
+      <div v-if="pageCount > 1" class="pager">
+        <button type="button" :disabled="page <= 1" @click="goTo(page - 1)">Previous</button>
+        <span>Page {{ page }} of {{ pageCount }}</span>
+        <button type="button" :disabled="page >= pageCount" @click="goTo(page + 1)">Next</button>
+      </div>
+    </section>
 
-        <p v-if="error" class="banner">{{ error }}</p>
-
-        <UserTable
-          :users="users"
-          :loading="loading"
-          :editing-id="editing?.id ?? null"
-          @edit="editing = $event"
-          @delete="onDelete"
-        />
-
-        <div v-if="pageCount > 1" class="pager">
-          <button type="button" :disabled="page <= 1" @click="goTo(page - 1)">Previous</button>
-          <span>Page {{ page }} of {{ pageCount }}</span>
-          <button type="button" :disabled="page >= pageCount" @click="goTo(page + 1)">Next</button>
-        </div>
-      </section>
-    </div>
+    <BaseModal :open="formOpen" :label="editing ? 'Edit user' : 'Add a user'" @close="closeForm">
+      <UserForm :editing="editing" :on-save="save" @cancel="closeForm" />
+    </BaseModal>
   </div>
 </template>
 
@@ -115,14 +131,10 @@ h1 { margin: 0; font-size: 1.5rem; letter-spacing: -0.02em; }
   padding: 0.25rem 0.7rem;
 }
 
-.layout { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); align-items: start; }
-@media (max-width: 760px) {
-  .layout { grid-template-columns: 1fr; }
-}
-
 .list { display: grid; gap: 1rem; }
 .toolbar { display: flex; gap: 0.5rem; }
-.search { width: 100%; }
+.search { flex: 1; min-width: 0; }
+.add { flex: none; white-space: nowrap; }
 
 .toast {
   margin: 0 0 1rem;

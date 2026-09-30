@@ -34,12 +34,21 @@ async function fillIn(wrapper, { name, email, role, country }) {
 
 describe('UserForm', () => {
   describe('create mode', () => {
-    it('shows the add heading and no cancel button', () => {
+    it('shows the add heading and a cancel button', () => {
       const { wrapper } = build();
 
       expect(wrapper.find('h2').text()).toBe('Add a user');
-      expect(wrapper.findAll('button')).toHaveLength(1);
+      expect(wrapper.findAll('button')).toHaveLength(2);
       expect(wrapper.find('button[type="submit"]').text()).toBe('Add user');
+    });
+
+    it('emits cancel so the modal can close without saving', async () => {
+      const { wrapper, onSave } = build();
+
+      await wrapper.find('button[type="button"]').trigger('click');
+
+      expect(wrapper.emitted('cancel')).toHaveLength(1);
+      expect(onSave).not.toHaveBeenCalled();
     });
 
     it('starts blank with role defaulted to member', () => {
