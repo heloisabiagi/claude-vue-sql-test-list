@@ -99,6 +99,15 @@ describe('UserTable', () => {
       expect(wrapper.emitted('edit')[0]).toEqual([USERS[1]]);
     });
 
+    it('emits edit when a user name is clicked', async () => {
+      const wrapper = build();
+
+      await rows(wrapper)[0].find('.name button').trigger('click');
+
+      expect(wrapper.emitted('edit')).toHaveLength(1);
+      expect(wrapper.emitted('edit')[0]).toEqual([USERS[0]]);
+    });
+
     it('emits delete with the clicked user', async () => {
       const wrapper = build();
 

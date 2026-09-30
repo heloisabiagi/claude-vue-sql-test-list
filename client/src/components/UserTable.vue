@@ -32,7 +32,11 @@ function formatDate(value) {
       </thead>
       <tbody>
         <tr v-for="user in users" :key="user.id" :class="{ active: user.id === editingId }">
-          <td class="name">{{ user.name }}</td>
+          <td class="name">
+            <button type="button" class="name-link" @click="$emit('edit', user)">
+              {{ user.name }}
+            </button>
+          </td>
           <td class="email">{{ user.email }}</td>
           <td><span class="pill" :data-role="user.role">{{ user.role }}</span></td>
           <td class="country">{{ countryName(user.country) || '—' }}</td>
@@ -69,6 +73,15 @@ tr.active td { background: var(--accent-soft); }
 tbody tr:last-child td { border-bottom: none; }
 
 .name { font-weight: 550; white-space: nowrap; }
+.name-link {
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  font-weight: inherit;
+  text-align: left;
+}
+.name-link:hover { color: var(--accent-ink); text-decoration: underline; }
 .email { color: var(--muted); }
 .muted { color: var(--muted); white-space: nowrap; }
 .country { white-space: nowrap; }
