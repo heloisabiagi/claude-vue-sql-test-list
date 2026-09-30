@@ -22,12 +22,12 @@ function flash(message) {
   setTimeout(() => (notice.value = ''), 3000);
 }
 
-function openAdd() {
-  editing.value = null;
-  formOpen.value = true;
-}
+// Counts modal openings. A save can outlive its modal (closed with Cancel or
+// Esc while pending, then another one opened); comparing counts lets it tell.
+let formSession = 0;
 
-function openEdit(user) {
+function openForm(user = null) {
+  formSession += 1;
   editing.value = user;
   formOpen.value = true;
 }
@@ -40,6 +40,7 @@ function closeForm() {
 // Passed to the form; rejections flow back so it can show field-level errors
 // and the modal stays open until the save succeeds.
 async function save(payload) {
+  const session = formSession;
   if (editing.value) {
     await update(editing.value.id, payload);
     flash('User updated');
@@ -47,7 +48,8 @@ async function save(payload) {
     await create(payload);
     flash('User added');
   }
-  closeForm();
+  // Only close the modal this save came from, never one opened since.
+  if (session === formSession) closeForm();
 }
 
 async function onDelete(user) {
@@ -82,7 +84,7 @@ async function onDelete(user) {
           placeholder="Search name or email…"
           aria-label="Search users"
         />
-        <button type="button" class="primary add" @click="openAdd">Add user</button>
+        <button type="button" class="primary add" @click="openForm()">Add user</button>
       </div>
 
       <p v-if="error" class="banner">{{ error }}</p>
@@ -91,7 +93,7 @@ async function onDelete(user) {
         :users="users"
         :loading="loading"
         :editing-id="editing?.id ?? null"
-        @edit="openEdit"
+        @edit="openForm"
         @delete="onDelete"
       />
 
