@@ -25,7 +25,7 @@ This project is loosely based on this [YouTube video tutorial](https://www.youtu
 Good start with Greptile and happy with my initial setup. Let's see how Copilot/Code Rabbit will handle the same functionality.
 
 ### Log 3: Moving the User form to a modal
-- I've proposed the user profile form to be open in a modal instad of living as a sidebar. I've described the behavior, asked it to be fully responsive and smaller screen and got a good result
+- I've proposed the user profile form to be open in a modal instead of living as a sidebar. I've described the behavior, asked it to be fully responsive in smaller screen and got a good result
 - Greptile has found some minor issues. I find it particularly interesting that Greptile, just like Code Rabbit, sends a suggestion prompt for the agent to fix it (and I'm aware more premium versions come with suggestions you can apply straight away). 
 
 ---------------------------------------------------------
