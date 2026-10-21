@@ -45,3 +45,32 @@ jobs:
       - name: Run tests
         # --ci fails on missing snapshots instead of writing them silently.
         run: npm test -- --ci
+
+  api:
+    name: API integration (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Same floor as the client job: the API depends on node:sqlite.
+        node: ['22.x', '24.x']
+
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
